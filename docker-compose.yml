@@ -1,0 +1,27 @@
+# Start everything:  docker compose up -d --build
+# Stop everything:   docker compose down
+services:
+  mcp:
+    build: .
+    container_name: mcp-file-server
+    restart: unless-stopped
+    environment:
+      MCP_HOST: "0.0.0.0"          # inside the container; the port is only published to localhost below
+      MCP_PORT: "8000"
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?set MCP_AUTH_TOKEN in .env}
+    ports:
+      - "127.0.0.1:8000:8000"      # local testing (Inspector, check_remote.py)
+    volumes:
+      - ./workspace:/app/workspace  # agents' files, visible on your disk
+      - ./logs:/app/logs            # audit log of every tool call
+
+  tunnel:
+    image: ngrok/ngrok:latest
+    container_name: mcp-tunnel
+    restart: unless-stopped
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:?set NGROK_AUTHTOKEN in .env}   # only the tunnel sees this
+    command: ["http", "--url=${NGROK_DOMAIN:?set NGROK_DOMAIN in .env}", "--host-header=localhost:8000", "mcp:8000"]
+    depends_on:
+      mcp:
+        condition: service_healthy
