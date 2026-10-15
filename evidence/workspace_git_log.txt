@@ -1,0 +1,27 @@
+commit bdc2e02939f8938fd59fa289f00e295054c61335
+Author: mcp-agent <agent@localhost>
+Date:   2026-10-15 13:01:21 +0800
+
+    Reviewer: harden load/save (empty, corrupt, wrong-shape file; atomic write), add 7 tests, update state/log/checkpoints
+
+ CHECKPOINTS.md    |  1 +
+ PLAN_LOG.md       |  2 ++
+ PROJECT_STATE.md  | 13 ++++++++-----
+ todo/test_todo.py | 43 +++++++++++++++++++++++++++++++++++++++++++
+ todo/todo.py      | 19 +++++++++++++++++--
+ 5 files changed, 71 insertions(+), 7 deletions(-)
+
+commit e56ff9fcd53c2e3fe8b6d59913beda670401955d
+Author: mcp-agent <agent@localhost>
+Date:   2026-10-15 12:59:19 +0800
+
+    Add to-do CLI (todo/todo.py), unittest tests, and update handoff files
+
+ .gitkeep          |  0
+ CHECKPOINTS.md    |  6 ++++
+ DECISIONS.md      |  5 +++
+ PLAN_LOG.md       | 11 +++++++
+ PROJECT_STATE.md  | 17 ++++++++++
+ todo/test_todo.py | 64 ++++++++++++++++++++++++++++++++++++++
+ todo/todo.py      | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 195 insertions(+)

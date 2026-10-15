@@ -106,6 +106,16 @@ class ToolTests(unittest.TestCase):
         self.assertIn("No matches", search_code("zzz"))
         self.assertIn("No matches", search_code("hello", case_sensitive=True))
 
+    def test_search_accepts_a_single_file_path(self):
+        write_file("todo/todo.py", "def add_task():\n    pass\n")
+        write_file("todo/other.py", "def add_task():\n    pass\n")
+        out = search_code("add_task", path="todo/todo.py")
+        self.assertIn("todo/todo.py:1:", out)
+        self.assertNotIn("other.py", out)
+        with self.assertRaises(ToolInputError) as ctx:
+            search_code("x", path="todo/missing.py")
+        self.assertIn("Path not found", str(ctx.exception))
+
     # --- git-lite ---
     @unittest.skipUnless(shutil.which("git"), "git not installed")
     def test_git_status_commit_log(self):
