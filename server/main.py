@@ -1,7 +1,9 @@
 """Entry point. Run with:  python -m server.main"""
+import uvicorn
 from mcp.server.fastmcp import FastMCP
 
 from . import config
+from .auth import TokenAuthMiddleware, check_startup_auth
 from .bootstrap import bootstrap
 from .tools import ALL_TOOLS
 
@@ -22,7 +24,16 @@ def build_server() -> FastMCP:
 
 
 def main() -> None:
-    build_server().run(transport=config.TRANSPORT)
+    mcp = build_server()
+    if config.TRANSPORT == "stdio":  # local testing only
+        mcp.run(transport="stdio")
+        return
+    check_startup_auth()
+    app = mcp.streamable_http_app()
+    if config.AUTH_TOKEN:
+        app = TokenAuthMiddleware(app, config.AUTH_TOKEN)
+    # access_log is off on purpose: with a secret-path token, URLs must not reach logs.
+    uvicorn.run(app, host=config.HOST, port=config.PORT, access_log=False)
 
 
 if __name__ == "__main__":

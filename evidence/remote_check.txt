@@ -1,0 +1,9 @@
+Target: https://gazing-knoll-numerator.ngrok-free.dev/mcp
+[PASS] Request WITHOUT token is refused - HTTP 401
+[PASS] initialize with token - HTTP 200, server=file-server
+[PASS] notifications/initialized accepted - HTTP 202
+[PASS] tools/list - 9 tools: list_files, read_file, write_file, str_replace, delete_file, search_code, git_status, git_commit, git_log
+[PASS] list_files returns the workspace - .gitkeep (0 bytes) | CHECKPOINTS.md (150 bytes) | DECISIONS.md (167 bytes) | PLAN_LOG.md (150 bytes) | PROJECT_STATE.md 
+[PASS] Sandbox escape '../secret.txt' is refused - Error executing tool read_file: path escapes the workspace root
+
+ALL CHECKS PASSED
